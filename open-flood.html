@@ -20,10 +20,31 @@ body {
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap"
       rel="stylesheet"
     />
-           <p style="text-align: center;"><button id="begin">start the fun!</button>
+       <style>
+.container {
+  height: 200px;
+  position: relative;
+  border: 3px solid green;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+</style>
+
+<div class="container">
+  <div class="center">
+    <button id="begin">start the fun!</button>
             <button id="end">stop the insanity!</button>
             2 windows will popup. And they will randomly change their contents.
-           </p>
+  </div>
+</div> 
+        
         <script>
             var stop = false;
             var popups = {};
