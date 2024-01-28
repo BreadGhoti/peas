@@ -1,101 +1,93 @@
 <!DOCTYPE html>
-    <html lang="en">
-       <head>
-           <style>
-body {
-  background-image: url('https://c1.wallpaperflare.com/preview/763/984/887/pea-peas-vegetables-green.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-}
-</style>
-           <title>FloodOfPeas</title>
-           <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
-            <meta charset="UTF-8" />
+<html lang="en">
+  <head>
+    <style>
+      body {
+        background-image: url('https://c1.wallpaperflare.com/preview/763/984/887/pea-peas-vegetables-green.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      }
+    </style>
+    <title>FloodOfPeas</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap"
-      rel="stylesheet"
-    />
-       <style>
-.center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-</style>
-<div class="center">
-    <button id="begin">start the fun!</button>
-            <button id="end">stop the insanity!</button>
-            <h1 style="color:purple;" style="font-family:verdana;">2 windows will popup. And they will randomly change their contents.</h1>
-  </div>
-</div> 
-        
-        <script>
-            var stop = false;
-            var popups = {};
-            var minWords = 2;
-            var maxWords = 6;
-             var words = [ "pea", "peas", "p", "p's" ]
-             var iwords = words.length-1;
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet" />
+    <style>
+      .center {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+    </style>
+    <div class="center">
+      <button id="begin">start the fun!</button>
+      <button id="end">stop the insanity!</button>
+      <h1 style="color:purple;" style="font-family:verdana;">2 windows will popup. And they will randomly change their contents.</h1>
+    </div>
+    </div>
+    <script>
+      var stop = false;
+      var popups = {};
+      var minWords = 2;
+      var maxWords = 6;
+      var words = ["pea", "peas", "p", "p's"]
+      var iwords = words.length - 1;
 
-              function randomNumber(min, max){
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-              }
+      function randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
 
-  function randomWord() {
-    return words[randomNumber(0, iwords)];
-  }
+      function randomWord() {
+        return words[randomNumber(0, iwords)];
+      }
 
-  function randomSentence(){
-    var words = [];
-    var n = randomNumber(minWords, maxWords);
-    for(var i=0;i<n;i++){
-      words.push(randomWord());
-    }
-    return words;
-  }
+      function randomSentence() {
+        var words = [];
+        var n = randomNumber(minWords, maxWords);
+        for (var i = 0; i < n; i++) {
+          words.push(randomWord());
+        }
+        return words;
+      }
 
-  function flood(words, name) {
-    words = encodeURIComponent(words.join(" "));
-    var url = "https://www.google.com/search?q=##&oq=##&sourceid=chrome&ie=UTF-8".replace("##", words).replace("##", words);
+      function flood(words, name) {
+        words = encodeURIComponent(words.join(" "));
+        var url = "https://www.google.com/search?q=##&oq=##&sourceid=chrome&ie=UTF-8".replace("##", words).replace("##", words);
+        if (name in popups && !popups[name]) {
+          // If browser is blocking our pop-ups, return.
+          return;
+        }
+        if (popups[name] && !popups[name].closed) {
+          popups[name].location = url;
+        } else {
+          popups[name] = window.open(url, name);
+        }
+        self.focus();
+        setTimeout(function() {
+          if (!stop) startFlood(name);
+        }, Math.floor(Math.random() * 10000) + 8000);
+      }
 
-    if(name in popups && !popups[name]) {
-      // If browser is blocking our pop-ups, return.
-      return;
-    }
-
-    if(popups[name] && !popups[name].closed) {
-      popups[name].location = url;
-    } else {
-      popups[name] = window.open(url, name);
-    }
-
-    self.focus();
-    setTimeout(function() {
-      if(!stop)
-        startFlood(name);
-    }, Math.floor(Math.random() * 10000) + 8000);
-  }
-
-  function startFlood(name) {
-    stop = false;
-    flood(randomSentence(), name);
-  }
-  document.getElementById("begin").addEventListener("click", function(e){
-    stop=false
-  startFlood("queueOne");
-  startFlood("queueTwo");
-  })
-  document.getElementById("end").addEventListener("click", function(e){
-    stop=true
-  })
-        </script>
-       </body>
-    </html>
+      function startFlood(name) {
+        stop = false;
+        flood(randomSentence(), name);
+      }
+      document.getElementById("begin").addEventListener("click", function(e) {
+        stop = false
+        startFlood("queueOne");
+        startFlood("queueTwo");
+      })
+      document.getElementById("end").addEventListener("click", function(e) {
+        stop = true
+      })
+    </script>
+    </body>
+</html>
