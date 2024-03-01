@@ -1,97 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="buttons.css">
-    <style>
-      body {
-        background-image: url('https://rare-gallery.com/uploads/posts/524801-agriculture.jpg');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
-      }
-    </style>
-    <title>FloodOfPeas</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      .center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-      }
-    </style>
-    <div class="center">
-      <button id="begin" class="button">
-        <span>BEGIN!</span>
-        <span>Start the Fun!</span>
-      </button>
-      <button id="end" class="button">
-        <span>STOP!</span>
-        <span>Stop the Insanity!</span>
-      </button>
-      <h1 style="color:purple;" style=font-family: Tahoma, sans-serif;"><b>Google windows will popup. And they will randomly open new different ones.</b></h1>
-    </div>
-    </div>
-    <script>
-      var stop = false;
-      var popups = {};
-      var minWords = 2;
-      var maxWords = 6;
-      var words = ["pea", "peas", "p", "p's"]
-      var iwords = words.length - 1;
+<head>
+  <link rel="stylesheet" href="buttons.css">
+  <style>
+    body {
+      background-image: url('https://rare-gallery.com/uploads/posts/524801-agriculture.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+  </style>
+  <title>FloodOfPeas</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    .center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+    .active {
+      background-color: green; /* Change to your desired active color */
+    }
+  </style>
+</head>
+<body>
+<div class="center">
+  <button id="start" class="button">
+    <span>BEGIN!</span>
+    <span>Start the Fun!</span>
+  </button>
+  <button id="end" class="button">
+    <span>STOP!</span>
+    <span>Stop the Insanity!</span>
+  </button>
+  <button id="hyperMode" class="button">
+    <span>HYPER MODE!</span>
+    <span>Activate Hyper Mode!</span>
+  </button>
+  <h1 style="color:purple;" style=font-family: Tahoma, sans-serif;"><b>Google windows will popup. And they will randomly open new different ones.</b></h1>
+</div>
+<script>
+  var stop = false;
+  var hyperMode = false;
+  var popups = {};
+  var minWords = 2;
+  var maxWords = 6;
+  var words = ["pea", "peas", "p", "p's"]
+  var iwords = words.length - 1;
 
-      function randomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
+  function randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-      function randomWord() {
-        return words[randomNumber(0, iwords)];
-      }
+  function randomWord() {
+    return words[randomNumber(0, iwords)];
+  }
 
-      function randomSentence() {
-        var words = [];
-        var n = randomNumber(minWords, maxWords);
-        for (var i = 0; i < n; i++) {
-          words.push(randomWord());
-        }
-        return words;
-      }
+  function randomSentence() {
+    var words = [];
+    var n = randomNumber(minWords, maxWords);
+    for (var i = 0; i < n; i++) {
+      words.push(randomWord());
+    }
+    return words;
+  }
 
-      function flood(words, name) {
-        words = encodeURIComponent(words.join(" "));
-        var url = "https://www.google.com/search?q=##&oq=##&sourceid=chrome&ie=UTF-8".replace("##", words).replace("##", words);
-        if (name in popups && !popups[name]) {
-          // If browser is blocking our pop-ups, return.
-          return;
-        }
-        if (popups[name] && !popups[name].closed) {
-          popups[name].location = url;
-        } else {
-          popups[name] = window.open(url, name);
-        }
-        self.focus();
-        setTimeout(function() {
-          if (!stop) startFlood(name);
-        }, Math.floor(Math.random() * 10000) + 8000);
-      }
+  function flood(words, name) {
+    words = encodeURIComponent(words.join(" "));
+    var url = "https://www.google.com/search?q=##&oq=##&sourceid=chrome&ie=UTF-8".replace("##", words).replace("##", words);
+    if (name in popups && !popups[name]) {
+      // If browser is blocking our pop-ups, return.
+      return;
+    }
+    if (popups[name] && !popups[name].closed) {
+      popups[name].location = url;
+    } else {
+      popups[name] = window.open(url, name);
+    }
+    self.focus();
+    var delay = hyperMode ? Math.floor(Math.random() * 100) + 80 : Math.floor(Math.random() * 10000) + 8000;
+    setTimeout(function() {
+      if (!stop) startFlood(name);
+    }, delay);
+  }
 
-      function startFlood(name) {
-        stop = false;
-        flood(randomSentence(), name);
-      }
-      document.getElementById("begin").addEventListener("click", function(e) {
-        stop = false
-        startFlood("queueOne");
-        startFlood("queueTwo");
-      })
-      document.getElementById("end").addEventListener("click", function(e) {
-        stop = true
-      })
-    </script>
-    </body>
+  function startFlood(name) {
+    stop = false;
+    flood(randomSentence(), name);
+  }
+  
+  document.getElementById("start").addEventListener("click", function(e) {
+    if (hyperMode) {
+      stop = false;
+      startFlood("queueOne");
+      startFlood("queueTwo");
+    } else {
+      stop = false;
+      startFlood("queueOne");
+      startFlood("queueTwo");
+    }
+  });
+
+  document.getElementById("end").addEventListener("click", function(e) {
+    stop = true;
+  });
+
+  document.getElementById("hyperMode").addEventListener("click", function(e) {
+    hyperMode = !hyperMode;
+    if (hyperMode) {
+      document.getElementById("hyperMode").classList.add("active");
+      document.getElementById("hyperMode").childNodes[1].textContent = "Disable Hyper Mode";
+      document.getElementById("start").childNodes[1].textContent = "Start Hyper Mode!";
+      alert("Hyper mode activated!");
+    } else {
+      document.getElementById("hyperMode").classList.remove("active");
+      document.getElementById("hyperMode").childNodes[1].textContent = "Activate Hyper Mode!";
+      document.getElementById("start").childNodes[1].textContent = "Start the Fun!";
+    }
+  });
+
+</script>
+</body>
 </html>
