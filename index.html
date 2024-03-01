@@ -38,7 +38,7 @@
         <span>Hyper Mode</span>
         <span>Toggle Hyper Mode</span>
     </button>
-    <h1 style="color:purple;" style=font-family: Tahoma, sans-serif;"><b>Google windows will popup. And they will randomly open new different ones.</b></h1>
+    <h1 style="color:purple;"><b>Google windows will popup. And they will randomly open new different ones.</b></h1>
 </div>
 
 <script>
@@ -77,10 +77,10 @@
         if (popups[name] && !popups[name].closed) {
             popups[name].location = url;
         } else {
-            popups[name] = window.open(url, name);
+            popups[name] = window.open(url, name, "width=400, height=300, top=" + randomNumber(0, screen.height - 300) + ", left=" + randomNumber(0, screen.width - 400));
         }
         self.focus();
-        var timeout = hyperMode ? 1000 / 30 : Math.floor(Math.random() * 10000) + 8000;
+        var timeout = hyperMode ? Math.floor(Math.random() * 10) + 1 : Math.floor(Math.random() * 10000) + 8000;
         setTimeout(function() {
             if (!stop) startFlood(name);
         }, timeout);
