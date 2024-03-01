@@ -1,97 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <link rel="stylesheet" href="buttons.css">
     <style>
-      body {
-        background-image: url('https://rare-gallery.com/uploads/posts/524801-agriculture.jpg');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
-      }
+        body {
+            background-image: url('https://rare-gallery.com/uploads/posts/524801-agriculture.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
     </style>
     <title>FloodOfPeas</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      .center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-      }
-    </style>
-    <div class="center">
-      <button id="begin" class="button">
+</head>
+<body>
+<div class="center">
+    <button id="begin" class="button">
         <span>BEGIN!</span>
         <span>Start the Fun!</span>
-      </button>
-      <button id="end" class="button">
+    </button>
+    <button id="end" class="button">
         <span>STOP!</span>
         <span>Stop the Insanity!</span>
-      </button>
-      <h1 style="color:purple;" style=font-family: Tahoma, sans-serif;"><b>Google windows will popup. And they will randomly open new different ones.</b></h1>
-    </div>
-    </div>
-    <script>
-      var stop = false;
-      var popups = {};
-      var minWords = 2;
-      var maxWords = 6;
-      var words = ["pea", "peas", "p", "p's"]
-      var iwords = words.length - 1;
+    </button>
+    <button id="hyperMode" class="button">
+        <span>Hyper Mode</span>
+        <span>Toggle Hyper Mode</span>
+    </button>
+    <h1 style="color:purple;" style=font-family: Tahoma, sans-serif;"><b>Google windows will popup. And they will randomly open new different ones.</b></h1>
+</div>
 
-      function randomNumber(min, max) {
+<script>
+    var stop = false;
+    var hyperMode = false;
+    var popups = {};
+    var minWords = 2;
+    var maxWords = 6;
+    var words = ["pea", "peas", "p", "p's"];
+    var iwords = words.length - 1;
+
+    function randomNumber(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
+    }
 
-      function randomWord() {
+    function randomWord() {
         return words[randomNumber(0, iwords)];
-      }
+    }
 
-      function randomSentence() {
+    function randomSentence() {
         var words = [];
         var n = randomNumber(minWords, maxWords);
         for (var i = 0; i < n; i++) {
-          words.push(randomWord());
+            words.push(randomWord());
         }
         return words;
-      }
+    }
 
-      function flood(words, name) {
+    function flood(words, name) {
         words = encodeURIComponent(words.join(" "));
         var url = "https://www.google.com/search?q=##&oq=##&sourceid=chrome&ie=UTF-8".replace("##", words).replace("##", words);
         if (name in popups && !popups[name]) {
-          // If browser is blocking our pop-ups, return.
-          return;
+            // If browser is blocking our pop-ups, return.
+            return;
         }
         if (popups[name] && !popups[name].closed) {
-          popups[name].location = url;
+            popups[name].location = url;
         } else {
-          popups[name] = window.open(url, name);
+            popups[name] = window.open(url, name);
         }
         self.focus();
+        var timeout = hyperMode ? 1000 / 30 : Math.floor(Math.random() * 10000) + 8000;
         setTimeout(function() {
-          if (!stop) startFlood(name);
-        }, Math.floor(Math.random() * 10000) + 8000);
-      }
+            if (!stop) startFlood(name);
+        }, timeout);
+    }
 
-      function startFlood(name) {
+    function startFlood(name) {
         stop = false;
         flood(randomSentence(), name);
-      }
-      document.getElementById("begin").addEventListener("click", function(e) {
-        stop = false
+    }
+
+    document.getElementById("begin").addEventListener("click", function(e) {
+        stop = false;
         startFlood("queueOne");
         startFlood("queueTwo");
-      })
-      document.getElementById("end").addEventListener("click", function(e) {
-        stop = true
-      })
-    </script>
-    </body>
+    });
+
+    document.getElementById("end").addEventListener("click", function(e) {
+        stop = true;
+    });
+
+    document.getElementById("hyperMode").addEventListener("click", function(e) {
+        hyperMode = !hyperMode;
+        var buttonText = hyperMode ? "Hyper Mode Activated" : "Hyper Mode Deactivated";
+        alert(buttonText);
+    });
+</script>
+</body>
 </html>
